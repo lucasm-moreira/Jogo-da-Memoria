@@ -1,4 +1,5 @@
 const ID_CONTEUDO = "conteudo"
+const ID_BTN_JOGAR = "jogar"
 
 class Tela {
     //Gera o código html abaixo com os itens passados do objeto heroi passado como parâmetro "item"
@@ -30,5 +31,11 @@ class Tela {
     static atualizarImagens(itens) {
         const codigoHtml = Tela.gerarStringHTMLPelaImagem(itens)
         Tela.alterarConteudoHTML(codigoHtml)
+    }
+
+    //Pega o id "jogar" do botão no index.html e programa para quando ele receber um click seja executado a função que está como parâmetro, funcaoOnClick
+    static configurarBotaoJogar(funcaoOnClick) {
+        const btnJogar = document.getElementById(ID_BTN_JOGAR)
+        btnJogar.onclick = funcaoOnClick
     }
 }
