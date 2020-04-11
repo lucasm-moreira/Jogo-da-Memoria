@@ -11,6 +11,12 @@ class JogoDaMemoria {
             { img: './arquivos/deadpool.png', nome: 'deadpool' },
             { img: './arquivos/mulhermaravilha.png', nome: 'mulhermaravilha' }
         ]
+        
+        this.iconePadrao = './arquivos/default.png'
+
+        this.heroisEscondidos = [
+
+        ]
     }
 
     //Será utilizado a palavra chave "this", portanto não será possível trabalhar com a palavra chave "static" antes da função
@@ -28,6 +34,7 @@ class JogoDaMemoria {
     //Faz uma cópia do array heroisIniciais e concatena para duplicar a quantidade
     //Chama a função .map, passa o item (cada item de copias) como parâmetro e retorna um Object.assign (para concatenar o objeto) passando como parâmetro um objeto vazio, o item e uma nova propriedade id gerada de forma aleatória.
     //Chama a função sort para ordenar os itens de forma aleatória
+    //Usa o setTimeout para executar a função esconderHerois após 1 segundo
     embaralhar() {
         const copias = this.heroisIniciais.concat(this.heroisIniciais)
 
@@ -37,7 +44,27 @@ class JogoDaMemoria {
 
         copias.sort(() => Math.random() - 0.5)
 
-        this.tela.atualizarImagens(copias)    
+        this.tela.atualizarImagens(copias)   
+        
+        setTimeout(() => {
+            this.esconderHerois(copias)
+        }, 1000);
+    }
+
+    //Troca a imagem de todos os heróis existentes pelo ícone padrão
+    //Chama a função map() e mapeia somente o necessário de cada heroi em herois, ou seja, nome e id
+    //Como não tem lógica dentro do map, na mesma linha retorna um objeto com as propriedades necessárias
+    //id e nome como são os mesmos valores de cada item mapeado pelo .map() podem ser montados como "id" e "nome", já o img precisa da sintaxe img: this.iconePadrao
+    //Pois nesse caso o .map() não sabe o valor de img que está sendo montado no objeto, precisando setar manualmente
+    //Após tudo isso é atualizado as imagens com os herois ocultos e criado uma variável para guardar os valores para verificar se estão corretos ou não posteriormente
+    esconderHerois(herois) {
+        const heroisOcultos = herois.map(({ nome, id }) => ({
+            id,
+            nome,
+            img: this.iconePadrao
+        }))
+        this.tela.atualizarImagens(heroisOcultos)
+        this.heroisOcultos = heroisOcultos
     }
 
     //Chama a função embaralhar() quando for clicado no botão "Clique aqui para iniciar" no index.html
