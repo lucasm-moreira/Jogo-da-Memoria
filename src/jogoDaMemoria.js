@@ -85,14 +85,24 @@ class JogoDaMemoria {
                 this.heroisSelecionados = []
 
                 //Conferir se os nomes dos heróis batem e se os ids diferem. Os ids precisam ser diferentes para que o jogador não clique duas vezes na mesma imagem e o sistema acuse como acerto
+                //Exibr o herói e a mensagem
                 if(opcao1.nome === item.nome && opcao1.id !== item.id) {
-                    alert('combinação correta! ' + item.nome)
+                    this.exibirHerois(item.nome)
+                    this.tela.exibirMensagem()
                     //para a execução
                     return;
                 }
-                alert('combinação incorreta!')
+                //Exibe a mensagem passando o parâmetro false para a função, já que o padrão é true para acerto e false para erro
+                this.tela.exibirMensagem(false)
                 break;
         }
+    }
+
+    exibirHerois(nomeDoHeroi) {
+        //Procurar herói pelo nome em heroisIniciais e obter somente a imagem dele
+        const { img } = this.heroisIniciais.find(({nome}) => nomeDoHeroi === nome)
+
+        this.tela.exibirHerois(nomeDoHeroi, img)
     }
 
     //Chama a função embaralhar() quando for clicado no botão "Clique aqui para iniciar" no index.html
