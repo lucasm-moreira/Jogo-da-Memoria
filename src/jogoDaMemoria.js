@@ -30,6 +30,7 @@ class JogoDaMemoria {
         //O bind() tem como objetivo manter as variáveis que existem dentro do contexto dessa classe também na classe Tela
         this.tela.configurarBotaoJogar(this.jogar.bind(this))
         this.tela.configurarBotaoVerificarSelecao(this.verificarSelecao.bind(this))
+        this.tela.configurarBotaoMostrarTudo(this.mostrarHeroisEscondidos.bind(this))
     }
 
     //Faz uma cópia do array heroisIniciais e concatena para duplicar a quantidade
@@ -45,10 +46,13 @@ class JogoDaMemoria {
 
         this.tela.atualizarImagens(copias)
         this.tela.exibirCarregando() 
-        
-        //Faz uma chamada assíncrona para a função timeout da classe Util. Após 1 segundo será executado a função resolve da promise
-        await this.util.timeout(1000)
 
+        const idDoIntervalo = this.tela.iniciarContador()
+        
+        //Faz uma chamada assíncrona para a função timeout da classe Util. Após 3 segundo será executado a função resolve da promise
+        await this.util.timeout(3000)
+
+        this.tela.limparContador(idDoIntervalo)
         this.esconderHerois(copias)
         this.tela.exibirCarregando(false)
     }
@@ -66,7 +70,7 @@ class JogoDaMemoria {
             img: this.iconePadrao
         }))
         this.tela.atualizarImagens(heroisOcultos)
-        this.heroisOcultos = heroisOcultos
+        this.heroisEscondidos = heroisOcultos
     }
 
     //Verifica a quantidade de heróis selecionadas durante o jogo e defini se houve acerto ou erro
@@ -100,6 +104,18 @@ class JogoDaMemoria {
                 this.tela.exibirMensagem(false)
                 break;
         }
+    }
+
+    //Função que pega todos os heróis da tela e coloca seus respectivos valores corretos
+    mostrarHeroisEscondidos() {
+        const heroisEscondidos = this.heroisEscondidos
+
+        //Para cada heroi de heroisEscondidos vai pegar apenas a imagem quando o item.nome (valor do heroisIniciais) for igual ao heroi.nome
+        for(const heroi of heroisEscondidos) {
+            const { img } = this.heroisIniciais.find(item => item.nome === heroi.nome)
+            heroi.img = img
+        }
+        this.tela.atualizarImagens(heroisEscondidos)
     }
 
     exibirHerois(nomeDoHeroi) {
