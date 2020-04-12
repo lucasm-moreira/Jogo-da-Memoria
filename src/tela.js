@@ -1,5 +1,17 @@
 const ID_CONTEUDO = "conteudo"
 const ID_BTN_JOGAR = "jogar"
+const ID_MENSAGEM = "mensagem"
+const CLASSE_INVISIVEL = "invisible"
+const MENSAGENS = {
+    sucesso: {
+        texto: 'Combinação correta!',
+        classe: 'alert-success'
+    },
+    erro: {
+        texto: 'Combinação incorreta!',
+        classe: 'alert-danger'
+    }
+}
 
 class Tela {
     //Gera o código html abaixo com os itens passados do objeto heroi passado como parâmetro "item"
@@ -42,5 +54,28 @@ class Tela {
     //Cria função verificarSelecao dentro do objeto window, recebe os parâmetros id e nome por meio da função onclick em obterCodigoHTML  
     static configurarBotaoVerificarSelecao(funcaoOnClick) {
         window.verificarSelecao = funcaoOnClick
+    }
+
+    //Pega o elemento por nome e realiza um forEach que para cada item encontrado a imagem será substituída pela que veio como parâmetro na função
+    static exibirHerois(nomeDoHeroi, img) {
+        const elementosHtml = document.getElementsByName(nomeDoHeroi)
+        elementosHtml.forEach(item => (item.src = img))
+    }
+
+    //Recebe com parâmetro o padrão true para sucesso
+    //Pega o elemento pelo id, verifica se teve sucesso ou fracasso e seta a mensagem e o texto de acordo o resultado. No final remove a classe invisível da tag do html
+    static exibirMensagem(sucesso = true) {
+        const elemento = document.getElementById(ID_MENSAGEM)
+        if(sucesso) {
+            elemento.classList.remove(MENSAGENS.erro.classe)
+            elemento.classList.add(MENSAGENS.sucesso.classe)
+            elemento.innerText = MENSAGENS.sucesso.texto
+        }
+        else {
+            elemento.classList.remove(MENSAGENS.sucesso.classe)
+            elemento.classList.add(MENSAGENS.erro.classe)
+            elemento.innerText = MENSAGENS.erro.texto
+        }
+        elemento.classList.remove(CLASSE_INVISIVEL)
     }
 }
