@@ -2,7 +2,10 @@
 function onLoad() {    
     const dependencias = {
         //A classe Tela é uma dependência e será utilizada como parâmetro quando instanciar um jogo da memória, por isso criar um objeto chamado dependencias
-        tela: Tela
+        tela: Tela,
+
+        //Util é uma variável global
+        util: Util
     }
 
     //Instancia um novo jogo da memória passando dependencias como parâmetro
