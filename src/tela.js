@@ -1,7 +1,12 @@
+//Métodos estáticos não podem acessar o 'this', por isso o util não será inserido no construtor
+const util = Util
+
 const ID_CONTEUDO = "conteudo"
 const ID_BTN_JOGAR = "jogar"
 const ID_MENSAGEM = "mensagem"
 const CLASSE_INVISIVEL = "invisible"
+const ID_CARREGANDO = "carregando"
+const ID_CONTADOR = "contador"
 const MENSAGENS = {
     sucesso: {
         texto: 'Combinação correta!',
@@ -64,7 +69,7 @@ class Tela {
 
     //Recebe com parâmetro o padrão true para sucesso
     //Pega o elemento pelo id, verifica se teve sucesso ou fracasso e seta a mensagem e o texto de acordo o resultado. No final remove a classe invisível da tag do html
-    static exibirMensagem(sucesso = true) {
+    static async exibirMensagem(sucesso = true) {
         const elemento = document.getElementById(ID_MENSAGEM)
         if(sucesso) {
             elemento.classList.remove(MENSAGENS.erro.classe)
@@ -77,5 +82,18 @@ class Tela {
             elemento.innerText = MENSAGENS.erro.texto
         }
         elemento.classList.remove(CLASSE_INVISIVEL)
+        await util.timeout(1000)
+        elemento.classList.add(CLASSE_INVISIVEL)
+    }
+
+    //Recebe com parâmetro o padrão true para sucesso
+    //Pega o elemento pelo id, verifica se é sucesso ou fracasso e de acordo com o resultado remove ou adiciona a classe invisível
+    static exibirCarregando(mostrar = true) {
+        const carregando = document.getElementById(ID_CARREGANDO)
+        if(mostrar) {
+            carregando.classList.remove(CLASSE_INVISIVEL)
+            return;
+        }
+        carregando.classList.add(CLASSE_INVISIVEL)
     }
 }
