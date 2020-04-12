@@ -7,6 +7,7 @@ const ID_MENSAGEM = "mensagem"
 const CLASSE_INVISIVEL = "invisible"
 const ID_CARREGANDO = "carregando"
 const ID_CONTADOR = "contador"
+const ID_MOSTRAR_TUDO = "mostrarTudo"
 const MENSAGENS = {
     sucesso: {
         texto: 'Combinação correta!',
@@ -95,5 +96,34 @@ class Tela {
             return;
         }
         carregando.classList.add(CLASSE_INVISIVEL)
+    }
+
+    //função para iniciar a contagem regressiva para iniciar o jogo
+    static iniciarContador() {
+        let contarAte = 3
+        const elementorContador = document.getElementById(ID_CONTADOR)        
+        const identificadorNoTexto = "$$contador"
+        const textoPadrao = `Começando em ${identificadorNoTexto} segundos...`
+
+        //Substitui o identificadorNoTexto pelo contarAte de forma regressiva
+        const atualizarTexto = () => (elementorContador.innerHTML = textoPadrao.replace(identificadorNoTexto, contarAte--))
+
+        atualizarTexto()
+
+        //A cada segundo vai chamar a função atualizar texto
+        const idDoIntervalo = setInterval(atualizarTexto, 1000)
+
+        return idDoIntervalo
+    }
+
+    //Chama a função clearInterval do Javascript que serve para parar o setInterval, deixa o elemento com id do contador vazia
+    static limparContador(idDoIntervalo) {
+        clearInterval(idDoIntervalo)
+        document.getElementById(ID_CONTADOR).innerHTML = ""
+    }
+
+    static configurarBotaoMostrarTudo(funcaoOnClick) {
+        const btnMostrarTudo = document.getElementById(ID_MOSTRAR_TUDO)
+        btnMostrarTudo.onclick = funcaoOnClick
     }
 }
