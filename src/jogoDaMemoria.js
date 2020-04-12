@@ -14,9 +14,8 @@ class JogoDaMemoria {
         
         this.iconePadrao = './arquivos/default.png'
 
-        this.heroisEscondidos = [
-
-        ]
+        this.heroisEscondidos = []
+        this.heroisSelecionados = []
     }
 
     //Será utilizado a palavra chave "this", portanto não será possível trabalhar com a palavra chave "static" antes da função
@@ -29,6 +28,7 @@ class JogoDaMemoria {
         //Força a classe Tela a usar o THIS do contexto da classe do jogoDaMemoria, isso é feito por meio da função bind()
         //O bind() tem como objetivo manter as variáveis que existem dentro do contexto dessa classe também na classe Tela
         this.tela.configurarBotaoJogar(this.jogar.bind(this))
+        this.tela.configurarBotaoVerificarSelecao(this.verificarSelecao.bind(this))
     }
 
     //Faz uma cópia do array heroisIniciais e concatena para duplicar a quantidade
@@ -37,12 +37,10 @@ class JogoDaMemoria {
     //Usa o setTimeout para executar a função esconderHerois após 1 segundo
     embaralhar() {
         const copias = this.heroisIniciais.concat(this.heroisIniciais)
-
-        copias.map(item => {
+        .map(item => {
             return Object.assign({}, item, { id: Math.random() / 0.5 })
         })
-
-        copias.sort(() => Math.random() - 0.5)
+        .sort(() => Math.random() - 0.5)
 
         this.tela.atualizarImagens(copias)   
         
@@ -65,6 +63,36 @@ class JogoDaMemoria {
         }))
         this.tela.atualizarImagens(heroisOcultos)
         this.heroisOcultos = heroisOcultos
+    }
+
+    //Verifica a quantidade de heróis selecionadas durante o jogo e defini se houve acerto ou erro
+    verificarSelecao(id, nome) {
+        const item = { id, nome }
+        const heroisSelecionados = this.heroisSelecionados.length
+
+        switch(heroisSelecionados) {
+            case 0:
+                //Adiciona uma escolha na lista e espera pelo próximo click
+                this.heroisSelecionados.push(item)
+                break;
+
+            case 1:
+                //Se a quantidade de escolhidos for 1, significa que o usuário só pode escolher mais um
+                //Para obter o valor do índice 0 da lista no JS basta user a sintaxe [variavel], se precisar do 0 e do 1, então [var1, var2, ...]
+                const [ opcao1 ] = this.heroisSelecionados
+
+                //Zerar lista para não deixar selecionar mais de 2 heróis por vez
+                this.heroisSelecionados = []
+
+                //Conferir se os nomes dos heróis batem e se os ids diferem. Os ids precisam ser diferentes para que o jogador não clique duas vezes na mesma imagem e o sistema acuse como acerto
+                if(opcao1.nome === item.nome && opcao1.id !== item.id) {
+                    alert('combinação correta! ' + item.nome)
+                    //para a execução
+                    return;
+                }
+                alert('combinação incorreta!')
+                break;
+        }
     }
 
     //Chama a função embaralhar() quando for clicado no botão "Clique aqui para iniciar" no index.html
