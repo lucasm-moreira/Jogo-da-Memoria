@@ -1,8 +1,9 @@
 class JogoDaMemoria {
-    constructor({ tela }) {
+    constructor({ tela, util }) {
         //Se passar como parâmetro, por exemplo, um obg = { tela: 1, idade: 2, nome: Lucas }
         //vai ser pegar só a propriedade tela e ignorar todo o resto
-        this.tela = tela
+        this.tela = tela        
+        this.util = util
 
         //Path sempre relativo ao index.html
         this.heroisIniciais = [
@@ -35,18 +36,21 @@ class JogoDaMemoria {
     //Chama a função .map, passa o item (cada item de copias) como parâmetro e retorna um Object.assign (para concatenar o objeto) passando como parâmetro um objeto vazio, o item e uma nova propriedade id gerada de forma aleatória.
     //Chama a função sort para ordenar os itens de forma aleatória
     //Usa o setTimeout para executar a função esconderHerois após 1 segundo
-    embaralhar() {
+    async embaralhar() {
         const copias = this.heroisIniciais.concat(this.heroisIniciais)
         .map(item => {
             return Object.assign({}, item, { id: Math.random() / 0.5 })
         })
         .sort(() => Math.random() - 0.5)
 
-        this.tela.atualizarImagens(copias)   
+        this.tela.atualizarImagens(copias)
+        this.tela.exibirCarregando() 
         
-        setTimeout(() => {
-            this.esconderHerois(copias)
-        }, 1000);
+        //Faz uma chamada assíncrona para a função timeout da classe Util. Após 1 segundo será executado a função resolve da promise
+        await this.util.timeout(1000)
+
+        this.esconderHerois(copias)
+        this.tela.exibirCarregando(false)
     }
 
     //Troca a imagem de todos os heróis existentes pelo ícone padrão
