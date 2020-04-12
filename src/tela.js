@@ -6,7 +6,7 @@ class Tela {
     static obterCodigoHTML(item) {
         return `
         <div class="col-md-3">
-            <div class="card" style="width: 50%;">
+            <div class="card" style="width: 50%;" onclick="window.verificarSelecao('${item.id}', '${item.nome}')">
                 <img src="${item.img}" name="${item.nome}" class="card-img-top" alt="...">
             </div>
         </div>
@@ -37,5 +37,10 @@ class Tela {
     static configurarBotaoJogar(funcaoOnClick) {
         const btnJogar = document.getElementById(ID_BTN_JOGAR)
         btnJogar.onclick = funcaoOnClick
+    }
+
+    //Cria função verificarSelecao dentro do objeto window, recebe os parâmetros id e nome por meio da função onclick em obterCodigoHTML  
+    static configurarBotaoVerificarSelecao(funcaoOnClick) {
+        window.verificarSelecao = funcaoOnClick
     }
 }
